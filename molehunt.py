@@ -183,7 +183,7 @@ def webbugserver():
         mapping = data.split("\n")
         ids = {}
         for line in mapping:
-                ids[line.split(",")[1].strip()] = line.split(",")[0].strip()
+                ids[line.split("::")[1].strip()] = line.split("::")[0].strip()
 
 
         for row in rows:
@@ -224,7 +224,7 @@ def sqlitebugserver():
         mapping = data.split("\n")
         ids = {}
         for line in mapping:
-                ids[line.split(",")[1].strip()] = line.split(",")[0].strip()
+                ids[line.split("::")[1].strip()] = line.split("::")[0].strip()
 
 
         for row in c.execute("SELECT * FROM requests"):
@@ -261,7 +261,7 @@ def honeybadger():
         mapping = data.split("\n")
         ids = {}
         for line in mapping:
-                ids[line.split(",")[1].strip()] = line.split(",")[0].strip()
+                ids[line.split("::")[1].strip()] = line.split("::")[0].strip()
 
 
         for row in c.execute("SELECT * FROM beacons"):
@@ -365,9 +365,9 @@ def parse_targets():
 
 		h = hashlib.sha1(CAMPAIGN+i).hexdigest()
 
-		temp.append(i + "," + h)
+		temp.append(i + "::" + h)
 
-	out = subprocess.check_output("touch CAMPAIGN/%s/.read" % CAMPAIGN, shell=True)
+	out = subprocess.check_output("touch campaign/%s/.read" % CAMPAIGN, shell=True)
 
 	if not os.path.exists("campaign/%s" % CAMPAIGN):
 		subprocess.check_output("mkdir campaign/%s" % CAMPAIGN, shell=True)
@@ -380,9 +380,12 @@ def parse_targets():
 def generate():
 	if not check_launch():
 		return
+	
+	if not os.path.exists("campaign/%s" % CAMPAIGN):
+		subprocess.check_output("mkdir campaign/%s" % CAMPAIGN, shell=True)
 
 	for pair in parse_targets():
-		this_name, this_id=pair.split(",")
+		this_name, this_id=pair.split("::")
 		this_name = this_name.strip().replace(" ","_")
 		this_id=this_id.strip()
 		docz(HONEYFILE, SOURCE_STRING, this_id, this_name, CAMPAIGN, BUILDER_STRING.split(":")[1])
