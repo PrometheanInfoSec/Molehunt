@@ -307,18 +307,21 @@ def help():
 
 
 def whitelist():
+	global WHITELIST
 	WHITELIST.append(raw_input("Enter IP to add: "))
 
 
 def honeyfile():
+	global HONEYFILE
 	HONEYFILE = raw_input("Path to honeyfile: ")
 
 def targetfile():
+	global TARGETFILE
 	TARGETFILE = raw_input("Path to targetfile: ")
 
 def campaign():
+	global CAMPAIGN
 	CAMPAIGN = raw_input("Campaign name: ")
-	return CAMPAIGN
 
 def monitor():
 	if not check_launch(MON=True):
@@ -344,6 +347,7 @@ def monitor():
 	
 
 def log():
+	global LOG
 	LOG = raw_input("New Log File: ")
 
 
